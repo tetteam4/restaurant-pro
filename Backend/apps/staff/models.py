@@ -6,12 +6,17 @@ from django.utils import timezone # Import timezone for potential default values
 class Staff(models.Model):
     """Represents a staff member."""
     class Position(models.TextChoices):
+        TECHNICIAN = "Technician", _("Technician")
+        ADMIN = 'Admin', _('Admin'),
         GARD = "Gard", _("Gard")
-        CLEANER = "Cleaner", _("Cleaner")
-        ELECTRICAL = "Electrical", _("Electrical")
-        MANAGER = "Manager", _("Manager")
         COOKER = "Cooker", _("Cooker")
-        FINANCIAL_MANAGER = "FinancialManager", _("Financial Manager") # Choice key clarity
+        CLEANER = "Cleaner", _("Cleaner")
+        RECEPTION = 'Reception', _('Reception'),
+        FINANCIAL_MANAGER = "FinancialManager", _("Financial Manager")
+        MANAGER = "Manager", _("Manager")
+        DELIVERY = "Delivery", _("Delivery")
+        OTHER_STAFF = "OtherStaff", _("Other Staff")
+        OTHER = "Other", _("Other")
 
     class Status(models.TextChoices):
         ACTIVE = "Active", _("Active")
@@ -29,10 +34,9 @@ class Staff(models.Model):
     salary = models.DecimalField(max_digits=12, decimal_places=2, default=Decimal("0.00"))
     status = models.CharField(_("Status"), choices=Status.choices, max_length=250)
 
-    # --- ADDED/MODIFIED FIELDS ---
+
     created_at = models.DateTimeField(_("Created At"), auto_now_add=True, editable=False) # REMOVED null=True
     updated_at = models.DateTimeField(_("Updated At"), auto_now=True, editable=False) # REMOVED null=True
-    # --- END ADDED/MODIFIED FIELDS ---
 
     def __str__(self):
         # Use get_FOO_display() for choice fields for better representation
