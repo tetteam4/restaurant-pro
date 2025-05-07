@@ -1,110 +1,170 @@
-# 🍽️ Restaurant MIS Pro
+# 🍽️ Restaurant Operations Platform (ROP) Core
 
-**A comprehensive Management Information System designed to streamline restaurant operations, enhance customer experience, and provide actionable insights for business growth.**
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
+[![Database](https://img.shields.io/badge/PostgreSQL-15+-blue.svg)](https://www.postgresql.org/)
+[![Backend](https://img.shields.io/badge/Backend-Node.js/Express-brightgreen.svg)](https://nodejs.org/) <!-- Replace with your backend tech -->
+[![Frontend](https://img.shields.io/badge/Frontend-React/Vue-cyan.svg)](https://reactjs.org/) <!-- Replace with your frontend tech -->
+[![Status](https://img.shields.io/badge/status-active--development-green.svg)]()
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/your-username/restaurant-mis-pro/main.yml?branch=main&style=flat-square)](https://github.com/your-username/restaurant-mis-pro/actions)
-[![Coverage Status](https://img.shields.io/coveralls/github/your-username/restaurant-mis-pro.svg?style=flat-square)](https://coveralls.io/github/your-username/restaurant-mis-pro)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE.md)
-[![Version](https://img.shields.io/github/v/release/your-username/restaurant-mis-pro?style=flat-square)](CHANGELOG.md)
-[![Contributors](https://img.shields.io/github/contributors/your-username/restaurant-mis-pro.svg?style=flat-square)](https://github.com/your-username/restaurant-mis-pro/graphs/contributors)
+A modern, scalable platform for streamlining end-to-end restaurant operations, from table management and order processing to inventory control and analytics. Features multi-location support and robust role-based access.
 
----
+## ✨ Core Features
 
-## ✨ Features
+✅ **Operations Management**
+-   🧑‍💼 **Staff Management:** Role-Based Access Control (Admin, Manager, Waiter, Chef, Cashier), Shift Scheduling (basic).
+-   🏪 **Multi-Location/Branch Support:** Centralized management for chain restaurants.
+-   🍽️ **Table Management:** Visual layout, status tracking (Available, Occupied, Reserved, Needs Cleaning), merging/splitting.
+-   📅 **Reservation System:** Booking management, waitlist functionality.
 
-*   **📊 Dashboard & Analytics:** Real-time overview of sales, popular items, table occupancy, and key performance indicators.
-*   **📝 Order Management:**
-    *   Digital order taking (POS, Tablet integration).
-    *   Real-time order tracking (Placed, Preparing, Ready, Served, Paid).
-    *   Customization options for orders (add-ons, notes).
-*   **🍽️ Table Management:**
-    *   Visual table layout with status indicators (Available, Occupied, Reserved, Needs Cleaning).
-    *   Easy merging/splitting of tables.
-    *   Reservation assignment.
-*   **📜 Menu Management:**
-    *   Dynamic creation, updating, and categorization of menu items.
-    *   Manage pricing, ingredients, allergens, and availability.
-    *   Support for daily specials, combos, and promotional offers.
-*   **📦 Inventory Control:**
-    *   Track stock levels of ingredients and supplies in real-time.
-    *   Automated low stock alerts and reorder suggestions.
-    *   Supplier management and purchase order tracking (optional).
-    *   Recipe costing and consumption tracking.
-*   **👨‍🍳 Kitchen Display System (KDS) Integration:**
-    *   Orders sent directly to kitchen screens/printers.
-    *   Order prioritization, status updates (e.g., "Firing", "Ready").
-    *   Timers for order preparation.
-*   **💳 Billing & Payments:**
-    *   Accurate bill generation with itemized details.
-    *   Split bills, apply discounts, manage tips.
-    *   Integration with multiple payment gateways and POS hardware.
-*   **👥 Staff Management:**
-    *   Role-based access control (Admin, Manager, Waiter, Chef, Cashier).
-    *   Shift scheduling and attendance tracking (optional).
-    *   Performance tracking (e.g., sales per waiter).
-*   **📅 Reservation System:**
-    *   Online and phone reservation management.
-    *   Automated confirmations and reminders.
-    *   Waitlist management with SMS notifications.
-*   **📈 Reporting & Insights:**
-    *   Comprehensive sales reports (daily, weekly, monthly, custom periods).
-    *   Inventory usage and wastage reports.
-    *   Customer behavior analysis (popular items, peak hours).
-    *   Employee performance metrics.
-    *   Exportable reports (CSV, PDF).
+✅ **Order & Menu**
+-   📝 **Order Processing:** POS integration, KDS communication, order tracking (Placed, Preparing, Ready, Served).
+-   🍲 **Menu Engineering:** Dynamic menu items, categories, modifiers, pricing tiers, allergen info.
+-   🧾 **Billing & Payments:** Bill splitting, discount application, payment gateway integration.
 
----
+✅ **Inventory & Supply Chain**
+-   📦 **Inventory Control:** Real-time tracking of ingredients & supplies, low stock alerts.
+-   🌿 **Recipe Management:** Ingredient mapping to menu items for accurate costing & consumption.
+-   🤝 **Supplier Management:** Basic supplier database and purchase order tracking.
 
-## 🚀 Workflow Overview
+✅ **System & Data**
+-   📊 **Reporting & Analytics:** Sales insights, popular items, inventory usage, staff performance.
+-   🛡️ **Audit Trails:** Comprehensive logging of critical actions and data changes.
+-   ⚙️ **System Configuration:** Customizable settings (taxes, service charges, restaurant details).
+-   🔑 **Secure Authentication:** JWT-based or similar secure login mechanisms.
 
-The system facilitates a seamless flow of operations from customer interaction to backend management, ensuring efficiency at every step.
+✅ **Technical Foundation**
+-   🆔 **UUID Primary Keys:** For globally unique identifiers.
+-   🧱 **Normalized Relational Structure:** With strategic use of JSONB for flexibility (e.g., custom modifiers, dynamic attributes).
+-   ☁️ **Scalable Architecture:** Designed for growth and potential cloud deployment.
+
+## 📊 Schema Overview (Simplified ERD)
+
+This diagram illustrates the core relationships between key entities in the Restaurant Operations Platform.
 
 ```mermaid
-graph TD
-    subgraph Customer Journey & Front-of-House
-        A[Customer Arrives / Makes Reservation] --> B{Table Available?};
-        B -- Yes --> C[Host/Waiter Seats Customer];
-        B -- No --> D[Add to Waitlist / Suggest Alternative];
-        C --> E[Waiter Takes Order (POS/Tablet)];
-    end
+erDiagram
+    STAFF {
+        UUID staff_id PK
+        VARCHAR name
+        VARCHAR email
+        VARCHAR password_hash
+        UUID role_id FK
+        UUID restaurant_id FK "nullable, for multi-location"
+    }
+    ROLES {
+        UUID role_id PK
+        VARCHAR role_name
+        JSONB permissions
+    }
+    RESTAURANTS {
+        UUID restaurant_id PK
+        VARCHAR name
+        VARCHAR address
+        JSONB settings "e.g., tax_rate, currency"
+    }
+    TABLES {
+        UUID table_id PK
+        UUID restaurant_id FK
+        VARCHAR table_number
+        VARCHAR status "Available, Occupied, Reserved"
+        INT capacity
+    }
+    MENU_ITEMS {
+        UUID item_id PK
+        UUID category_id FK
+        VARCHAR name
+        TEXT description
+        DECIMAL price
+        BOOLEAN is_available
+        JSONB modifiers_available "e.g., size, toppings"
+        JSONB allergen_info
+    }
+    CATEGORIES {
+        UUID category_id PK
+        VARCHAR name
+    }
+    INGREDIENTS {
+        UUID ingredient_id PK
+        VARCHAR name
+        VARCHAR unit_of_measure
+        DECIMAL cost_per_unit
+    }
+    RECIPE_COMPONENTS {
+        UUID recipe_component_id PK
+        UUID item_id FK "FK to MENU_ITEMS"
+        UUID ingredient_id FK
+        DECIMAL quantity_used
+    }
+    INVENTORY {
+        UUID inventory_id PK
+        UUID ingredient_id FK
+        UUID restaurant_id FK
+        DECIMAL current_stock
+        DECIMAL low_stock_threshold
+    }
+    ORDERS {
+        UUID order_id PK
+        UUID staff_id FK "waiter/cashier"
+        UUID table_id FK "nullable, for takeaway/delivery"
+        UUID customer_id FK "nullable"
+        VARCHAR status "Placed, Preparing, Ready, Served, Paid, Cancelled"
+        TIMESTAMP created_at
+        DECIMAL total_amount
+        DECIMAL discount_amount
+        DECIMAL final_amount
+    }
+    ORDER_ITEMS {
+        UUID order_item_id PK
+        UUID order_id FK
+        UUID item_id FK "FK to MENU_ITEMS"
+        INT quantity
+        DECIMAL unit_price_at_order
+        JSONB applied_modifiers
+        TEXT notes
+    }
+    PAYMENTS {
+        UUID payment_id PK
+        UUID order_id FK
+        VARCHAR payment_method
+        DECIMAL amount_paid
+        TIMESTAMP payment_date
+        VARCHAR transaction_ref
+    }
+    RESERVATIONS {
+        UUID reservation_id PK
+        UUID customer_id FK "nullable, guest name stored directly"
+        UUID table_id FK
+        UUID restaurant_id FK
+        VARCHAR customer_name
+        VARCHAR customer_phone
+        TIMESTAMP reservation_time
+        INT party_size
+        VARCHAR status "Confirmed, Seated, Cancelled, No-show"
+    }
+    AUDIT_LOGS {
+        UUID log_id PK
+        UUID staff_id FK "who performed action"
+        VARCHAR entity_affected
+        UUID entity_id
+        VARCHAR action_type "CREATE, UPDATE, DELETE"
+        JSONB old_values "nullable"
+        JSONB new_values "nullable"
+        TIMESTAMP timestamp
+    }
 
-    subgraph Order Fulfillment
-        E -- Order Details --> F[System: Create Order & Update Table Status];
-        F --> G[KDS: New Order Displayed in Kitchen];
-        F -- Ingredient Check --> H[System: Deduct/Flag Inventory];
-        G --> I[Kitchen Staff: Prepares Order];
-        I -- Order Ready --> J[KDS/System: Notify Waiter];
-    end
-
-    subgraph Service & Payment
-        J --> K[Waiter Serves Food to Customer];
-        K --> L[Customer Enjoys Meal];
-        L --> M[Customer Requests Bill];
-        M --> N[Waiter Generates Bill (POS)];
-        N -- Bill Details --> O[System: Record Transaction, Apply Discounts];
-        O --> P[Process Payment (Cash/Card/Digital)];
-        P -- Payment Confirmed --> Q[System: Update Order Status (Paid), Table Status (Clear)];
-        Q --> R[Staff Clears & Resets Table];
-    end
-
-    subgraph Management & Operations
-        S[Manager/Admin] --> T{Access System Backend};
-        T --> U[View Real-time Dashboard & Analytics];
-        T --> V[Manage Menu Items, Categories & Pricing];
-        T --> W[Manage Inventory, Suppliers & Purchase Orders];
-        T --> X[Manage Staff Accounts, Roles & Permissions];
-        T --> Y[Generate Custom Reports (Sales, Inventory, Performance)];
-        T --> Z[Configure System Settings & Reservations];
-    end
-
-    %% Styling (Optional, but makes it look nicer)
-    style A fill:#f9f,stroke:#333,stroke-width:2px,color:#000
-    style E fill:#ccf,stroke:#333,stroke-width:2px,color:#000
-    style G fill:#fcc,stroke:#333,stroke-width:2px,color:#000
-    style N fill:#cfc,stroke:#333,stroke-width:2px,color:#000
-    style S fill:#99f,stroke:#333,stroke-width:2px,color:#000
-    style F fill:#e6e6fa,stroke:#333,stroke-width:1px,color:#000
-    style H fill:#e6e6fa,stroke:#333,stroke-width:1px,color:#000
-    style J fill:#e6e6fa,stroke:#333,stroke-width:1px,color:#000
-    style O fill:#e6e6fa,stroke:#333,stroke-width:1px,color:#000
-    style Q fill:#e6e6fa,stroke:#333,stroke-width:1px,color:#000
+    STAFF ||--o{ ORDERS : "manages"
+    STAFF ||--|{ ROLES : "has"
+    STAFF }o--|| RESTAURANTS : "works_at (optional)"
+    RESTAURANTS ||--o{ TABLES : "has"
+    RESTAURANTS ||--o{ INVENTORY : "maintains"
+    RESTAURANTS ||--o{ RESERVATIONS : "accepts"
+    MENU_ITEMS ||--|{ CATEGORIES : "belongs_to"
+    MENU_ITEMS ||--o{ RECIPE_COMPONENTS : "composed_of"
+    INGREDIENTS ||--o{ RECIPE_COMPONENTS : "used_in"
+    INGREDIENTS ||--o{ INVENTORY : "tracked_as"
+    ORDERS ||--o{ ORDER_ITEMS : "contains"
+    ORDERS ||--|{ TABLES : "assigned_to (optional)"
+    ORDER_ITEMS }|--|| MENU_ITEMS : "is_a"
+    ORDERS ||--o{ PAYMENTS : "settled_by"
+    RESERVATIONS ||--|{ TABLES : "books"
+    AUDIT_LOGS ||--|{ STAFF : "action_by (optional)"
