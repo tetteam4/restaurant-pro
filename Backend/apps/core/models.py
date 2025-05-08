@@ -30,6 +30,7 @@ class Category(models.Model):
 class Attributes(models.Model):
     name = models.CharField(max_length=250)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    type = models.CharField(max_length=250)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -42,7 +43,7 @@ class Attributes(models.Model):
         return  f'{self.name} - {self.category.name}'
 
 class AttributesValues(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    name = models.CharField(max_length=250)
     attributes = models.ForeignKey(Attributes, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

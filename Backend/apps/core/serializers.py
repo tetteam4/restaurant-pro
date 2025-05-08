@@ -8,6 +8,8 @@ class TypeSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
+        type = TypeSerializer()
+
         model = Category
         fields = ['id','name','type']
 
@@ -15,9 +17,9 @@ class CategorySerializer(serializers.ModelSerializer):
 class AttributesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attributes
-        fields = ['id','name','category']
+        fields = ['id','name','category', 'type']
 
 class AttributesValuesSerializer(serializers.ModelSerializer):
     class Meta:
         model = AttributesValues
-        fields = ['id','category','attributes']
+        fields = ['id','name','attributes']
