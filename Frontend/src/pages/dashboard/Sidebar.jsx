@@ -115,7 +115,7 @@ const Sidebar = ({ setActiveComponent }) => {
       </header>
 
       <ul className=" mr-1">
-        {accessibleComponents.map((component, index) => (
+        {AllComponents.map((component, index) => (
           <li key={index} className="relative group cursor-pointer">
             {component.value === "signout" ? (
               <a
