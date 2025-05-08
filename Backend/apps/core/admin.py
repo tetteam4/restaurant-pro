@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from . models import  Category,SubCategory,Type, SelectedCategory
+from . models import  Category,Attributes,Type, AttributesValues
 admin.site.register(Category)
-admin.site.register(SubCategory)
+admin.site.register(Attributes)
 admin.site.register(Type)
-admin.site.register(SelectedCategory)
+admin.site.register(AttributesValues)

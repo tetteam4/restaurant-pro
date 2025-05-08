@@ -1,3 +1,25 @@
 from django.shortcuts import render
+from . import serializers as base_serializers
+from . import models as base_models
+from .pagination import  TypePagination
+from rest_framework import generics, status
+from rest_framework.response import Response
 
-# Create your views here.
+class TypeAPIV(generics.ListCreateAPIView):
+    queryset = base_models.Type.objects.all()
+    serializer_class = base_serializers.TypeSerializer
+    pagination_class = TypePagination
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+class TypeAPIVIDeleteUpdate(generics.RetrieveUpdateDestroyAPIView):
+    queryset = base_models.Type.objects.all()
+    serializer_class = base_serializers.TypeSerializer
