@@ -45,6 +45,8 @@ const MainContent = ({ activeComponent }) => {
         return <Expenses />;
       case "Incomes":
         return <Incomes />;
+      case "SubMenu4":
+        return <SubMenu4 />;
       case "SubMenu3":
         return <SubMenu3 />;
       case "SubMenu2":
