@@ -21,6 +21,7 @@ import { Home } from "lucide-react";
 const Sidebar = ({ setActiveComponent }) => {
   const [selectedC, setSelectedC] = useState("home");
   const [activeC, setActiveC] = useState("home");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state) => state.user);
@@ -115,6 +116,91 @@ const Sidebar = ({ setActiveComponent }) => {
       </header>
 
       <ul className=" mr-1">
+        <li className="relative group cursor-pointer">
+          <a
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className={`relative flex items-center w-full px-6 py-3 transition-all duration-300 rounded-r-3xl
+    ${
+      isMenuOpen
+        ? "bg-white text-primary"
+        : "hover:bg-white hover:bg-opacity-20 text-white"
+    }`}
+          >
+            <IoMdSettings className="text-xl" />
+            <span className="mr-4 text-lg font-semibold whitespace-nowrap">
+              مدیریت منو
+            </span>
+            <span className="ml-auto">{isMenuOpen ? "▲" : "▼"}</span>
+          </a>
+
+          {/* Tooltip */}
+          <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-4 py-2 bg-gray-800 text-white text-sm rounded-lg shadow-lg z-50 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+            مدیریت منو
+            <div className="absolute top-1/2 -translate-y-1/2 -left-1 w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-r-4 border-r-gray-800"></div>
+          </div>
+        </li>
+
+        {/* Submenus */}
+        {isMenuOpen && (
+          <div className="ml-4 mt-2 space-y-1">
+            {["SubMenu1", "SubMenu2", "SubMenu3"].map((sub, i) => {
+              const subName =
+                sub === "SubMenu1"
+                  ? "زیر منوی ۱"
+                  : sub === "SubMenu2"
+                  ? "زیر منوی ۲"
+                  : "زیر منوی ۳";
+
+              return (
+                <div key={i} className="relative group cursor-pointer">
+                  <a
+                    onClick={() => {
+                      setActiveComponent(sub);
+                      setSelectedC(sub);
+                      setActiveC(sub);
+                    }}
+                    onMouseEnter={() => setActiveC(sub)}
+                    onMouseLeave={() => setActiveC(selectedC)}
+                    className={`relative flex items-center w-full px-6 py-2 text-sm transition-all duration-300 rounded-r-3xl
+              ${
+                activeC === sub
+                  ? "bg-white text-primary"
+                  : "hover:bg-white hover:bg-opacity-20 text-white"
+              }`}
+                  >
+                    <span className="text-lg mr-4">{subName}</span>
+
+                    <span
+                      className={`absolute left-0 -top-12 w-10 h-10 bg-transparent rounded-full shadow-[-30px_30px_0_8px_white]
+                transition-opacity duration-100
+                ${
+                  activeC === sub
+                    ? "opacity-100"
+                    : "opacity-0 group-hover:opacity-100"
+                }`}
+                    ></span>
+                    <span
+                      className={`absolute left-0 -bottom-12 w-10 h-10 bg-transparent rounded-full shadow-[-30px_-30px_0_8px_white]
+                transition-opacity duration-100
+                ${
+                  activeC === sub
+                    ? "opacity-100"
+                    : "opacity-0 group-hover:opacity-100"
+                }`}
+                    ></span>
+                  </a>
+
+                  {/* Tooltip for submenu (optional) */}
+                  <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-3 py-1 bg-gray-800 text-white text-xs rounded shadow z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                    {subName}
+                    <div className="absolute top-1/2 -translate-y-1/2 -left-1 w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-r-4 border-r-gray-800"></div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
         {AllComponents.map((component, index) => (
           <li key={index} className="relative group cursor-pointer">
             {component.value === "signout" ? (

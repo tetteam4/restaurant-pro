@@ -10,18 +10,18 @@ import StaffManager from "./pages/StaffManager";
 import Incomes from "./pages/incomes";
 import Expenses from "./pages/Expenses";
 import BlockManager from "./pages/BlockManger";
-import Agreements from "./pages/Agreements";
+import Agreements from "./pages/SubMenu1";
 import Salaries from "./pages/Salaries";
 import Rent from "./pages/RentManager";
 import CreateUser from "./pages/CreaateUsers";
-import  Residentialunites  from "./pages/ResidentialUnites";
+import Residentialunites from "./pages/ResidentialUnites";
+import SubMenu1 from './pages/SubMenu1'
+import SubMenu2 from "./pages/SubMenu2";
 const MainContent = ({ activeComponent }) => {
   const renderContent = () => {
     switch (activeComponent) {
       case "dashboard":
         return <Dashboard />;
-      case "Agreements":
-        return <Agreements />;
       case "BlockManager":
         return <BlockManager />;
       case "user managements":
@@ -44,12 +44,12 @@ const MainContent = ({ activeComponent }) => {
         return <Expenses />;
       case "Incomes":
         return <Incomes />;
-      case "CreateUsers":
+      case "SubMenu3":
         return <CreateUser />;
-      case "BlockesServices":
-        return <BlockManager />;
-      case "RentManger":
-        return <Rent />;
+      case "SubMenu2":
+        return <SubMenu2 />;
+      case "SubMenu1":
+        return <SubMenu1 />;
       default:
         return <Dashboard />;
     }
