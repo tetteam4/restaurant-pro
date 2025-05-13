@@ -15,8 +15,9 @@ import Salaries from "./pages/Salaries";
 import Rent from "./pages/RentManager";
 import CreateUser from "./pages/CreaateUsers";
 import Residentialunites from "./pages/ResidentialUnites";
-import SubMenu1 from './pages/SubMenu1'
+import SubMenu1 from "./pages/SubMenu1";
 import SubMenu2 from "./pages/SubMenu2";
+import SubMenu3 from "./pages/SubMenu3";
 const MainContent = ({ activeComponent }) => {
   const renderContent = () => {
     switch (activeComponent) {
@@ -45,7 +46,7 @@ const MainContent = ({ activeComponent }) => {
       case "Incomes":
         return <Incomes />;
       case "SubMenu3":
-        return <CreateUser />;
+        return <SubMenu3 />;
       case "SubMenu2":
         return <SubMenu2 />;
       case "SubMenu1":
