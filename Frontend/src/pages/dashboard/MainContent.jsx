@@ -18,6 +18,7 @@ import Residentialunites from "./pages/ResidentialUnites";
 import SubMenu1 from "./pages/SubMenu1";
 import SubMenu2 from "./pages/SubMenu2";
 import SubMenu3 from "./pages/SubMenu3";
+import SubMenu4 from "./pages/SubMenu4";
 const MainContent = ({ activeComponent }) => {
   const renderContent = () => {
     switch (activeComponent) {

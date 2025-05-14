@@ -46,22 +46,22 @@ const Sidebar = ({ setActiveComponent }) => {
 
   const AllComponents = [
     { name: "صفحه اصلی", value: "home", icon: <LuActivity /> },
-    { name: "دوکان‌دار ها", value: "Shopkeepers", icon: <LuUserRoundPlus /> },
-    { name: "قراردادها", value: "Agreements", icon: <FaBuilding /> },
-    { name: "خدمات", value: "ServiceManager", icon: <MdLocalLaundryService /> },
-    { name: "کرایه‌", value: "RentManger", icon: <GiTakeMyMoney /> },
-    { name: "کارمندان", value: "StafFManager", icon: <FaUserGear /> },
-    { name: "معاشات", value: "Salaries", icon: <FaBuilding /> },
-    { name: "مصارف", value: "Expenses", icon: <MdLocalLaundryService /> },
-    { name: "عواید", value: "Incomes", icon: <GiTakeMyMoney /> },
-    { name: "واحدات", value: "Blockes", icon: <FaHome /> },
-    {
-      name: "خدمات واحدات",
-      value: "BlockesServices",
-      icon: <FaServicestack />,
-    },
-    { name: " ثبت کاربر جدید", value: "CreateUsers", icon: <FaBuilding /> },
-    { name: "خروج", value: "signout", icon: <FaSignOutAlt /> },
+    // { name: "دوکان‌دار ها", value: "Shopkeepers", icon: <LuUserRoundPlus /> },
+    // { name: "قراردادها", value: "Agreements", icon: <FaBuilding /> },
+    // { name: "خدمات", value: "ServiceManager", icon: <MdLocalLaundryService /> },
+    // { name: "کرایه‌", value: "RentManger", icon: <GiTakeMyMoney /> },
+    // { name: "کارمندان", value: "StafFManager", icon: <FaUserGear /> },
+    // { name: "معاشات", value: "Salaries", icon: <FaBuilding /> },
+    // { name: "مصارف", value: "Expenses", icon: <MdLocalLaundryService /> },
+    // { name: "عواید", value: "Incomes", icon: <GiTakeMyMoney /> },
+    // { name: "واحدات", value: "Blockes", icon: <FaHome /> },
+    // {
+    //   name: "خدمات واحدات",
+    //   value: "BlockesServices",
+    //   icon: <FaServicestack />,
+    // },
+    // { name: " ثبت کاربر جدید", value: "CreateUsers", icon: <FaBuilding /> },
+    // { name: "خروج", value: "signout", icon: <FaSignOutAlt /> },
   ];
 
   let accessibleComponents = [];
@@ -143,13 +143,15 @@ const Sidebar = ({ setActiveComponent }) => {
         {/* Submenus */}
         {isMenuOpen && (
           <div className="ml-4 mt-2 space-y-1">
-            {["SubMenu1", "SubMenu2", "SubMenu3"].map((sub, i) => {
+            {["SubMenu1", "SubMenu2", "SubMenu3", "SubMenu4"].map((sub, i) => {
               const subName =
                 sub === "SubMenu1"
                   ? "زیر منوی ۱"
                   : sub === "SubMenu2"
                   ? "زیر منوی ۲"
-                  : "زیر منوی ۳";
+                  : sub === "SubMenu3"
+                  ? "زیر منوی ۳"
+                  : "زیر منوی ۴"; // New submenu name
 
               return (
                 <div key={i} className="relative group cursor-pointer">
@@ -162,35 +164,35 @@ const Sidebar = ({ setActiveComponent }) => {
                     onMouseEnter={() => setActiveC(sub)}
                     onMouseLeave={() => setActiveC(selectedC)}
                     className={`relative flex items-center w-full px-6 py-2 text-sm transition-all duration-300 rounded-r-3xl
-              ${
-                activeC === sub
-                  ? "bg-white text-primary"
-                  : "hover:bg-white hover:bg-opacity-20 text-white"
-              }`}
+            ${
+              activeC === sub
+                ? "bg-white text-primary"
+                : "hover:bg-white hover:bg-opacity-20 text-white"
+            }`}
                   >
                     <span className="text-lg mr-4">{subName}</span>
 
                     <span
                       className={`absolute left-0 -top-12 w-10 h-10 bg-transparent rounded-full shadow-[-30px_30px_0_8px_white]
-                transition-opacity duration-100
-                ${
-                  activeC === sub
-                    ? "opacity-100"
-                    : "opacity-0 group-hover:opacity-100"
-                }`}
+              transition-opacity duration-100
+              ${
+                activeC === sub
+                  ? "opacity-100"
+                  : "opacity-0 group-hover:opacity-100"
+              }`}
                     ></span>
                     <span
                       className={`absolute left-0 -bottom-12 w-10 h-10 bg-transparent rounded-full shadow-[-30px_-30px_0_8px_white]
-                transition-opacity duration-100
-                ${
-                  activeC === sub
-                    ? "opacity-100"
-                    : "opacity-0 group-hover:opacity-100"
-                }`}
+              transition-opacity duration-100
+              ${
+                activeC === sub
+                  ? "opacity-100"
+                  : "opacity-0 group-hover:opacity-100"
+              }`}
                     ></span>
                   </a>
 
-                  {/* Tooltip for submenu (optional) */}
+                  {/* Tooltip */}
                   <div className="absolute left-full top-1/2 -translate-y-1/2 ml-2 px-3 py-1 bg-gray-800 text-white text-xs rounded shadow z-50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
                     {subName}
                     <div className="absolute top-1/2 -translate-y-1/2 -left-1 w-0 h-0 border-t-4 border-t-transparent border-b-4 border-b-transparent border-r-4 border-r-gray-800"></div>
