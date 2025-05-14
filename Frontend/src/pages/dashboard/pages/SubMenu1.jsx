@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL = "http://localhost:8000/core/";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const API_URL = `${BASE_URL}/core/`;
 
 const SubMenu1 = () => {
   const [name, setName] = useState("");
@@ -14,7 +15,7 @@ const SubMenu1 = () => {
     try {
       setLoading(true);
       const res = await axios.get(API_URL);
-      setItems(res.data);
+      setItems(Array.isArray(res.data) ? res.data : res.data.results || []);
     } catch (err) {
       console.error("Fetch failed:", err);
     } finally {

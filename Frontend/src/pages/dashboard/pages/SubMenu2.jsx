@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const CATEGORY_API = "http://localhost:8000/core/category/";
-const TYPE_API = "http://localhost:8000/core/";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
+const CATEGORY_API = `${BASE_URL}/core/category/`;
+const TYPE_API = `${BASE_URL}/core/`;
 
 const SubMenu2 = () => {
   const [name, setName] = useState("");
@@ -19,9 +20,11 @@ const SubMenu2 = () => {
       const [typeRes, categoryRes] = await Promise.all([
         axios.get(TYPE_API),
         axios.get(CATEGORY_API),
-      ]);
-      setTypes(typeRes.data);
-      setCategories(categoryRes.data);
+      ]);setTypes(
+        Array.isArray(typeRes.data) ? typeRes.data : typeRes.data.results || []
+      );
+
+      setCategories( Array.isArray (categoryRes.data) ? categoryRes.data :categoryRes.data.results || [] )
     } catch (error) {
       console.error("Failed fetching data:", error);
     } finally {
