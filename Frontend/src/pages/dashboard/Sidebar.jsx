@@ -111,7 +111,7 @@ const Sidebar = ({ setActiveComponent }) => {
         </div>
 
         <span className="text-lg font-semibold  text-white whitespace-nowrap">
-          مارکیت حسین زاده
+         رستورانت
         </span>
       </header>
 

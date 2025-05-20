@@ -43,6 +43,7 @@ const SubMenu2 = () => {
 
     try {
       const payload = { name, type };
+      console.log(payload);
       if (editingId) {
         await axios.put(`${CATEGORY_API}${editingId}/`, payload);
       } else {
