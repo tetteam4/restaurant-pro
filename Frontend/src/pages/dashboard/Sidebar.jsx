@@ -48,7 +48,7 @@ const Sidebar = ({ setActiveComponent }) => {
     { name: "صفحه اصلی", value: "home", icon: <LuActivity /> },
     // { name: "دوکان‌دار ها", value: "Shopkeepers", icon: <LuUserRoundPlus /> },
     // { name: "قراردادها", value: "Agreements", icon: <FaBuilding /> },
-    // { name: "خدمات", value: "ServiceManager", icon: <MdLocalLaundryService /> },
+    { name: "خدمات", value: "ServiceManager", icon: <MdLocalLaundryService /> },
     // { name: "کرایه‌", value: "RentManger", icon: <GiTakeMyMoney /> },
     // { name: "کارمندان", value: "StafFManager", icon: <FaUserGear /> },
     // { name: "معاشات", value: "Salaries", icon: <FaBuilding /> },
