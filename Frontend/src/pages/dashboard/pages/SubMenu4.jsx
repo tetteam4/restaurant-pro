@@ -73,8 +73,8 @@ const SubMenu4 = () => {
     setAttribute(item.attributes);
     const attr = attributes.find((a) => a.id === item.attributes);
     if (attr) {
-      setCategory(attr.category);
-      setType(attr.type);
+      setCategory(attr.category.toString());
+      setType(attr.type.toString());
     }
     setEditingId(item.id);
   };
@@ -88,12 +88,12 @@ const SubMenu4 = () => {
     }
   };
 
-  const filteredTypes = types.filter(
-    (t) => categories.find((c) => c.id === parseInt(category))?.type === t.id
+  const filteredCategories = categories.filter(
+    (c) => c.type === parseInt(type)
   );
 
   const filteredAttributes = attributes.filter(
-    (a) => a.category === parseInt(category) && a.type === parseInt(type)
+    (a) => a.category === parseInt(category)
   );
 
   return (
@@ -101,115 +101,121 @@ const SubMenu4 = () => {
       <h2 className="text-xl font-bold mb-4">مدیریت مقدار خصوصیت‌ها</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-6">
-        <input
-          type="text"
-          placeholder="نام مقدار"
-          className="border border-gray-300 p-2 rounded w-64"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-
-        {/* Select Category */}
-        <select
-          value={category}
-          onChange={(e) => {
-            setCategory(e.target.value);
-            setType("");
-            setAttribute("");
-          }}
-          className="border border-gray-300 p-2 rounded w-64"
-          required
-        >
-          <option value="" disabled>
-            انتخاب کتگوری
-          </option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-
-        {/* Select Type (filtered by category) */}
+        {/* Step 1: Type */}
         <select
           value={type}
           onChange={(e) => {
             setType(e.target.value);
+            setCategory("");
             setAttribute("");
           }}
           className="border border-gray-300 p-2 rounded w-64"
           required
         >
-          <option value="" disabled>
-            انتخاب نوع
-          </option>
-          {filteredTypes.map((t) => (
+          <option value="">انتخاب نوع</option>
+          {types.map((t) => (
             <option key={t.id} value={t.id}>
               {t.name}
             </option>
           ))}
         </select>
 
-        {/* Select Attribute (filtered by category & type) */}
-        <select
-          value={attribute}
-          onChange={(e) => setAttribute(e.target.value)}
-          className="border border-gray-300 p-2 rounded w-64"
-          required
-        >
-          <option value="" disabled>
-            انتخاب خصوصیت
-          </option>
-          {filteredAttributes.map((a) => (
-            <option key={a.id} value={a.id}>
-              {a.name}
-            </option>
-          ))}
-        </select>
+        {/* Step 2: Category (depends on Type) */}
+        {type && (
+          <select
+            value={category}
+            onChange={(e) => {
+              setCategory(e.target.value);
+              setAttribute("");
+            }}
+            className="border border-gray-300 p-2 rounded w-64"
+            required
+          >
+            <option value="">انتخاب کتگوری</option>
+            {filteredCategories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        )}
 
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          {editingId ? "ویرایش" : "اضافه کردن"}
-        </button>
+        {/* Step 3: Attribute (depends on Category) */}
+        {category && (
+          <select
+            value={attribute}
+            onChange={(e) => setAttribute(e.target.value)}
+            className="border border-gray-300 p-2 rounded w-64"
+            required
+          >
+            <option value="">انتخاب خصوصیت</option>
+            {filteredAttributes.map((a) => (
+              <option key={a.id} value={a.id}>
+                {a.name}
+              </option>
+            ))}
+          </select>
+        )}
+
+        {/* Step 4: Name + Submit (depends on Attribute) */}
+        {attribute && (
+          <>
+            <input
+              type="text"
+              placeholder="نام مقدار"
+              className="border border-gray-300 p-2 rounded w-64"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              {editingId ? "ویرایش" : "اضافه کردن"}
+            </button>
+          </>
+        )}
       </form>
 
       {loading ? (
         <p>در حال بارگذاری...</p>
       ) : (
         <ul className="space-y-2">
-          {values.map((item) => {
-            const attr = attributes.find((a) => a.id === item.attributes);
-            return (
-              <li
-                key={item.id}
-                className="flex justify-between items-center border p-2 rounded"
-              >
-                <div>
-                  <p className="font-medium">{item.name}</p>
-                  <p className="text-sm text-gray-500">
-                    خصوصیت: {attr?.name || "—"}
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleEdit(item)}
-                    className="text-yellow-600"
-                  >
-                    ویرایش
-                  </button>
-                  <button
-                    onClick={() => handleDelete(item.id)}
-                    className="text-red-600"
-                  >
-                    حذف
-                  </button>
-                </div>
-              </li>
-            );
-          })}
+          {(attribute
+            ? values.filter((v) => v.attributes === parseInt(attribute)) // ✅ filter when attribute is selected
+            : values
+          ) // ✅ otherwise show all values
+            .map((item) => {
+              const attr = attributes.find((a) => a.id === item.attributes);
+              return (
+                <li
+                  key={item.id}
+                  className="flex justify-between items-center border p-2 rounded"
+                >
+                  <div>
+                    <p className="font-medium">{item.name}</p>
+                    <p className="text-sm text-gray-500">
+                      خصوصیت: {attr?.name || "—"}
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEdit(item)}
+                      className="text-yellow-600"
+                    >
+                      ویرایش
+                    </button>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      className="text-red-600"
+                    >
+                      حذف
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
         </ul>
       )}
     </div>
