@@ -91,7 +91,7 @@ class UserProfileView(APIView):
             return Response(
                 {"detail": "User profile not found."}, status=status.HTTP_404_NOT_FOUND
             )
-        serializer = UserProfileSerializer(profile, data=request.data, partial=True)
+        serializer = ProfileSerializer(profile, data=request.data, partial=True)
 
         if serializer.is_valid():
             # Save the updated profile to the database
