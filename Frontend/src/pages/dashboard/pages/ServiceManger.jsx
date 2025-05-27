@@ -7,6 +7,7 @@ export default function ServiceManager() {
   const [types, setTypes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [attributes, setAttributes] = useState([]);
+  const [attributeValues, setAttributeValues] = useState([]);
   const [visibleAttributes, setVisibleAttributes] = useState([]);
 
   const [selectedType, setSelectedType] = useState("");
@@ -15,16 +16,14 @@ export default function ServiceManager() {
   const [customerName, setCustomerName] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [attributeValues, setAttributeValues] = useState([]);
+
   const [attributeInputs, setAttributeInputs] = useState({});
+  const [orders, setOrders] = useState([]);
+
   useEffect(() => {
     axios
       .get(`${BASE_URL}/core/attribute/value/`)
-      .then((res) => {
-        setAttributeValues(res.data.results);
-        console.log(res.data.results);
-      })
-
+      .then((res) => setAttributeValues(res.data.results))
       .catch((err) => console.error("Failed to load attribute values:", err));
   }, []);
 
@@ -58,48 +57,72 @@ export default function ServiceManager() {
     setSelectedCategory(cat.name);
     const filtered = attributes.filter((attr) => attr.category === cat.id);
     setVisibleAttributes(filtered);
+    setAttributeInputs({});
   };
 
-  const handleSubmit = async () => {
-    if (!customerName || !selectedType || !selectedCategory) {
-      setMessage("لطفاً تمام فیلدها را تکمیل کنید.");
+  const handleAddOrder = () => {
+    if (!selectedType || !selectedCategory) {
+      setMessage("لطفاً نوع و کتگوری را انتخاب کنید.");
       return;
     }
 
+    const newOrder = {
+      type: selectedType,
+      category: selectedCategory,
+      attributes: attributeInputs,
+    };
+
+    setOrders([...orders, newOrder]);
+    setSelectedCategory("");
+    setVisibleAttributes([]);
+    setAttributeInputs({});
+    setMessage("");
+  };
+
+  const handleRemoveOrder = (index) => {
+    const updatedOrders = orders.filter((_, i) => i !== index);
+    setOrders(updatedOrders);
+  };
+
+  const handleSubmitAll = async () => {
+    if (!customerName || orders.length === 0) {
+      setMessage("لطفاً نام مشتری و حداقل یک سفارش را وارد کنید.");
+      return;
+    }
+
+    const payloads = {
+      customer: customerName,
+      orders: orders.map((order) => ({
+        category: order.category,
+        attributes: order.attributes,
+      })),
+    };
+
     try {
+      console.log(payloads);
+
       setSubmitting(true);
       setMessage("");
 
-      const payload = {
-        customer: customerName,
-        category: selectedCategory,
-        type: selectedType,
-        attributes: attributeInputs, // ⬅️ Add this line
-      };
+      for (const payload of payloads) {
+        await axios.post(`${BASE_URL}/orders/`, payload);
+      }
 
-      console.log("Submitting payload:", payload);
-
-      await axios.post(`${BASE_URL}/orders/`, payload);
-      setMessage("سفارش با موفقیت ثبت شد.");
-
-      // Reset the form
+      setMessage("سفارش‌ها با موفقیت ثبت شدند.");
+      setOrders([]);
       setCustomerName("");
-      setSelectedType(types[0]?.id || "");
-      setSelectedCategory("");
-      setVisibleAttributes([]);
-      setAttributeInputs({});
     } catch (error) {
       console.error("Order submission failed:", error);
-      setMessage("ارسال سفارش ناکام ماند.");
+      setMessage("ارسال سفارش‌ها ناکام ماند.");
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto bg-white p-6 rounded-2xl shadow-xl mt-8 space-y-8">
+    <div className="max-w-4xl mx-auto bg-white p-6 rounded-2xl shadow-xl mt-8 space-y-8">
       <h2 className="text-2xl font-bold text-gray-800 text-center">
-        مدیریت خدمات
+        مدیریت چند سفارش
       </h2>
 
       {/* Type Tabs */}
@@ -111,12 +134,13 @@ export default function ServiceManager() {
               setSelectedType(type.id);
               setSelectedCategory("");
               setVisibleAttributes([]);
+              setAttributeInputs({});
             }}
             className={`px-5 py-2 rounded-full transition-all duration-300 font-semibold 
             ${
               selectedType === type.id
-                ? "bg-blue-600 text-white shadow-md scale-105"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-100 hover:scale-105"
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-blue-100"
             }`}
           >
             {type.name}
@@ -134,11 +158,11 @@ export default function ServiceManager() {
                 key={cat.id}
                 onClick={() => handleCategorySelect(cat)}
                 className={`p-4 rounded-xl border transition-all duration-300 text-sm md:text-base font-medium 
-                ${
-                  selectedCategory === cat.id
-                    ? "bg-green-500 text-white border-green-500 shadow-lg scale-105"
-                    : "bg-white text-gray-800 border-gray-300 hover:bg-green-100 hover:scale-105"
-                }`}
+              ${
+                selectedCategory === cat.id
+                  ? "bg-green-500 text-white border-green-500 shadow-lg scale-105"
+                  : "bg-white text-gray-800 border-gray-300 hover:bg-green-100 hover:scale-105"
+              }`}
               >
                 {cat.name}
               </button>
@@ -146,15 +170,15 @@ export default function ServiceManager() {
         </div>
       )}
 
-      {/* Attribute List */}
+      {/* Attribute Inputs */}
       {visibleAttributes.length > 0 && (
         <div className="bg-gray-50 p-4 rounded-lg shadow-inner">
           <h3 className="text-lg font-semibold text-gray-700 mb-4 text-center">
-            ویژگی‌های این کتگوری
+            ویژگی‌های انتخاب‌شده
           </h3>
           <div className="space-y-4">
             {visibleAttributes.map((attr) => {
-              const attrName = attr.name; // Use name instead of ID
+              const attrName = attr.name;
               const attrType = attr.type;
               const value = attributeInputs[attrName] || "";
 
@@ -171,7 +195,7 @@ export default function ServiceManager() {
                   {attrType === "input" && (
                     <input
                       type="text"
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2"
                       value={value}
                       onChange={(e) =>
                         setAttributeInputs({
@@ -198,8 +222,8 @@ export default function ServiceManager() {
 
                   {attrType === "dropdown" && (
                     <select
-                      className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      value={value} // <- you're storing the selected attribute name
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2"
+                      value={value}
                       onChange={(e) =>
                         setAttributeInputs({
                           ...attributeInputs,
@@ -222,6 +246,60 @@ export default function ServiceManager() {
               );
             })}
           </div>
+
+          <div className="text-right mt-4">
+            <button
+              onClick={handleAddOrder}
+              className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-full font-bold shadow-md"
+            >
+              افزودن به سفارش‌ها
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Order Summary Table */}
+      {orders.length > 0 && (
+        <div className="border rounded-lg overflow-x-auto bg-gray-50 p-4">
+          <h3 className="text-lg font-bold text-gray-800 mb-3">
+            سفارش‌های اضافه‌شده:
+          </h3>
+          <table className="w-full text-sm text-center border-collapse">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="p-2">نوع</th>
+                <th className="p-2">کتگوری</th>
+                <th className="p-2">ویژگی‌ها</th>
+                <th className="p-2">عملیات</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders.map((order, index) => {
+                const typeName =
+                  types.find((t) => t.id === order.type)?.name || "";
+                const catName = order.category || "";
+                const attrText = Object.entries(order.attributes)
+                  .map(([key, val]) => `${key}: ${val}`)
+                  .join("، ");
+
+                return (
+                  <tr key={index} className="border-t">
+                    <td className="p-2">{typeName}</td>
+                    <td className="p-2">{catName}</td>
+                    <td className="p-2 text-right">{attrText}</td>
+                    <td className="p-2">
+                      <button
+                        onClick={() => handleRemoveOrder(index)}
+                        className="text-red-600 hover:underline"
+                      >
+                        حذف
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
 
@@ -232,21 +310,21 @@ export default function ServiceManager() {
         </label>
         <input
           type="text"
-          className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full border border-gray-300 rounded-lg px-4 py-2"
           placeholder="نام مشتری را وارد کنید"
           value={customerName}
           onChange={(e) => setCustomerName(e.target.value)}
         />
       </div>
 
-      {/* Submit Button */}
+      {/* Submit All */}
       <div className="text-center">
         <button
-          onClick={handleSubmit}
+          onClick={handleSubmitAll}
           disabled={submitting}
-          className="bg-blue-600 hover:bg-blue-700 transition-all text-white px-6 py-3 rounded-full font-bold shadow-md disabled:opacity-50"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-bold shadow-md disabled:opacity-50"
         >
-          {submitting ? "در حال ارسال..." : "ثبت سفارش"}
+          {submitting ? "در حال ارسال..." : "ثبت تمام سفارش‌ها"}
         </button>
       </div>
 
