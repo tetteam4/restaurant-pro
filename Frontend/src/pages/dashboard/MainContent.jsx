@@ -9,7 +9,6 @@ import Shopkeepers from "./pages/ShopKeepers";
 import StaffManager from "./pages/StaffManager";
 import Incomes from "./pages/incomes";
 import Expenses from "./pages/Expenses";
-import BlockManager from "./pages/BlockManger";
 import Agreements from "./pages/SubMenu1";
 import Salaries from "./pages/Salaries";
 import Rent from "./pages/RentManager";
@@ -19,27 +18,24 @@ import SubMenu1 from "./pages/SubMenu1";
 import SubMenu2 from "./pages/SubMenu2";
 import SubMenu3 from "./pages/SubMenu3";
 import SubMenu4 from "./pages/SubMenu4";
+import PageSetting from "./pages/setting";
 const MainContent = ({ activeComponent }) => {
   const renderContent = () => {
     switch (activeComponent) {
       case "dashboard":
         return <Dashboard />;
-      case "BlockManager":
-        return <BlockManager />;
       case "user managements":
         return <UserManagement />;
       case "report":
         return <Report />;
       case "Salaries":
         return <Salaries />;
-      case "setting":
-        return <Setting />;
+      case "settings":
+        return <PageSetting />;
       case "ServiceManager":
         return <ServiceManager />;
       case "Shopkeepers":
         return <Shopkeepers />;
-      case "Blockes":
-        return <Residentialunites />;
       case "StafFManager":
         return <StaffManager />;
       case "Expenses":

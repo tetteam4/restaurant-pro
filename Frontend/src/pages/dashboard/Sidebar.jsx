@@ -16,7 +16,8 @@ import { MdLocalLaundryService } from "react-icons/md";
 import { LuCable } from "react-icons/lu";
 import { FaUserGear } from "react-icons/fa6";
 import { IoMdSettings } from "react-icons/io";
-import { Home } from "lucide-react";
+import { Home, Settings } from "lucide-react";
+import Setting from "./pages/setting";
 
 const Sidebar = ({ setActiveComponent }) => {
   const [selectedC, setSelectedC] = useState("home");
@@ -46,9 +47,9 @@ const Sidebar = ({ setActiveComponent }) => {
 
   const AllComponents = [
     { name: "صفحه اصلی", value: "home", icon: <LuActivity /> },
-    // { name: "دوکان‌دار ها", value: "Shopkeepers", icon: <LuUserRoundPlus /> },
     // { name: "قراردادها", value: "Agreements", icon: <FaBuilding /> },
     { name: "خدمات", value: "ServiceManager", icon: <MdLocalLaundryService /> },
+    { name: "تنظیمات", value: "settings", icon: <Settings /> },
     // { name: "کرایه‌", value: "RentManger", icon: <GiTakeMyMoney /> },
     // { name: "کارمندان", value: "StafFManager", icon: <FaUserGear /> },
     // { name: "معاشات", value: "Salaries", icon: <FaBuilding /> },
@@ -111,7 +112,7 @@ const Sidebar = ({ setActiveComponent }) => {
         </div>
 
         <span className="text-lg font-semibold  text-white whitespace-nowrap">
-         رستورانت
+          رستورانت
         </span>
       </header>
 
