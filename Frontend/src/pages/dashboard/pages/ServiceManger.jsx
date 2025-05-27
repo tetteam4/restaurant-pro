@@ -54,9 +54,9 @@ export default function ServiceManager() {
       .catch((err) => console.error("Failed to load attributes:", err));
   }, []);
 
-  const handleCategorySelect = (catId) => {
-    setSelectedCategory(catId);
-    const filtered = attributes.filter((attr) => attr.category === catId);
+  const handleCategorySelect = (cat) => {
+    setSelectedCategory(cat.name);
+    const filtered = attributes.filter((attr) => attr.category === cat.id);
     setVisibleAttributes(filtered);
   };
 
@@ -132,7 +132,7 @@ export default function ServiceManager() {
             .map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => handleCategorySelect(cat.id)}
+                onClick={() => handleCategorySelect(cat)}
                 className={`p-4 rounded-xl border transition-all duration-300 text-sm md:text-base font-medium 
                 ${
                   selectedCategory === cat.id
