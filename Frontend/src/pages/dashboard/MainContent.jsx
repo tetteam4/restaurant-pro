@@ -1,10 +1,10 @@
-import Customer from "./pages/ServiceManger";
+import Customer from "./pages/Roles";
 import Dashboard from "./pages/dashboard";
 import S_Transaction from "./pages/RentManager";
 import Report from "./pages/reports";
 import Setting from "./pages/setting";
 import RentManager from "./pages/RentManager";
-import ServiceManager from "./pages/ServiceManger";
+import ServiceManager from "./pages/Roles";
 import Shopkeepers from "./pages/ShopKeepers";
 import StaffManager from "./pages/StaffManager";
 import Incomes from "./pages/incomes";
@@ -32,7 +32,7 @@ const MainContent = ({ activeComponent }) => {
         return <Salaries />;
       case "settings":
         return <PageSetting />;
-      case "ServiceManager":
+      case "roles":
         return <ServiceManager />;
       case "Shopkeepers":
         return <Shopkeepers />;
