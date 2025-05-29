@@ -47,6 +47,7 @@ const Sidebar = ({ setActiveComponent }) => {
 
   const AllComponents = [
     { name: "صفحه اصلی", value: "home", icon: <LuActivity /> },
+    { name: " ثبت کاربر جدید", value: "UserManagement", icon: <FaBuilding /> },
     // { name: "قراردادها", value: "Agreements", icon: <FaBuilding /> },
     { name: "خدمات", value: "ServiceManager", icon: <MdLocalLaundryService /> },
     { name: "تنظیمات", value: "settings", icon: <Settings /> },
@@ -61,7 +62,6 @@ const Sidebar = ({ setActiveComponent }) => {
     //   value: "BlockesServices",
     //   icon: <FaServicestack />,
     // },
-    // { name: " ثبت کاربر جدید", value: "CreateUsers", icon: <FaBuilding /> },
     // { name: "خروج", value: "signout", icon: <FaSignOutAlt /> },
   ];
 
