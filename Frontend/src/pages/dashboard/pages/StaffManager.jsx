@@ -31,11 +31,11 @@ const statusOptions = [
   { value: "Inactive", label: "غیرفعال" },
 ];
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || "http://127.0.0.1:8000";
+const BASE_URL = import.meta.env.VITE_BASE_URL ;
 // *** IMPORTANT: Make sure your API endpoint returns a date field for staff ***
 // *** Common names are 'created_at', 'date_joined'. Adjust the field name ***
 // *** in the table section below if yours is different. ***
-const API_URL = `${BASE_URL}/staff/staff/`;
+const API_URL = `${BASE_URL}/staff/`;
 const itemsPerPage =15;
 
 const StaffManager = () => {
