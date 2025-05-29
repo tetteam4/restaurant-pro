@@ -20,12 +20,13 @@ import SubMenu3 from "./pages/SubMenu3";
 import SubMenu4 from "./pages/SubMenu4";
 import PageSetting from "./pages/setting";
 import Roles from "./pages/Roles";
+import UserManagement from "./pages/UserManagement";
 const MainContent = ({ activeComponent }) => {
   const renderContent = () => {
     switch (activeComponent) {
       case "dashboard":
         return <Dashboard />;
-      case "user managements":
+      case "UserManagement":
         return <UserManagement />;
       case "report":
         return <Report />;
