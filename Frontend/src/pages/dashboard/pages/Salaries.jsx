@@ -13,7 +13,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const BASE_URL = import.meta.env.VITE_BASE_URL;
-const API_URL = `${BASE_URL}/staff/salaries/`;
+const API_URL = `${BASE_URL}/salaries/`;
 const currentYear = moment().jYear();
 
 // Keep these constants accessible
