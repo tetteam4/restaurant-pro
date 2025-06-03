@@ -43,6 +43,12 @@ class RoleViewSet(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
 
+class RoleViewSetRetrieveDestroy(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
+    permission_classes = [AllowAny]
+
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
