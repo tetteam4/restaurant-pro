@@ -11,6 +11,7 @@ from .views import (
     ProfilePicUpdateView,
     RoleChoicesView,
     RoleViewSet,
+    RoleViewSetRetrieveDestroy,
     UpdateUserView,
     UserProfileView,
     UserViewSet,
@@ -46,4 +47,5 @@ urlpatterns = [
     ),
     path("user/password-change/", PasswordChangeApiView.as_view()),
     path("role/", RoleViewSet.as_view()),
+    path("role/<int:pk>/", RoleViewSetRetrieveDestroy.as_view()),
 ]
